@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>employee---</title>
+</head>
+<style>
+    .rederror {
+        color: red;
+    }
+    .btn-claass1, .btn-claass2 {
+    padding: 5px 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+   }
+.btn-claass2 {
+    background-color: #DC3545;
+}
+
+</style>
+
+<body>
+    <form action="" id="saveForm">
+        <label for="name">name</label>
+        <input type="text" name="name" id="name">
+        <div id="nameErrorDiv" class="rederror"></div>
+        <label for="age">Age</label>
+        <input type="number" name="age" id="age">
+        <div id="ageErrorDiv" class="rederror"></div>
+        <label for="rollno">EmpId:</label>
+        <input type="number" name="rollno" id="rollno">
+        <div id="rollErrorDiv" class="rederror"></div>
+        <br>
+        <label for="">Gender</label>
+        <input type="radio" name="gen" value="Male" id="male">Male
+        <input type="radio" name="gen" value="Female" id="female">Female
+        <input type="radio" name="gen" value="others" id="">others
+        <div id="Errorgendermessage" class="rederror"></div>
+        <br><br>
+        <label for="">Skills</label>
+        <input type="checkbox" name="hobby" id="" value="py">py
+        <input type="checkbox" name="hobby" id="" value="java">java
+        <input type="checkbox" name="hobby" id="" value="sql">sql
+        <input type="checkbox" name="hobby" id="" value="javascript">javascript
+        <input type="checkbox" name="hobby" id="" value="reactjs">reactjs
+        <div id="hobbiemsg" class="rederror"></div>
+        <br>
+        <label for="">experience</label>
+        <select id="branches">
+            <option value="">Select Branch</option>
+            <option value="javadeveloper">javadeveloper</option>
+            <option value=".net developer">.net developer</option>
+            <option value="python developer">python developer</option>
+        </select>
+        <div id="branchmsg" class="rederror"></div>
+        <br>
+        <label for="basic">Basic Salary</label>
+        <input type="number" name="basic" id="basic">31-40k
+        <div id="basicErrorDiv" class="rederror"></div>
+        <br>
+        <label for="hra">HRA</label>
+        <input type="number" name="hra" id="hra">25-30k
+        <div id="hraErrorDiv" class="rederror"></div>
+        <br>
+        <label for="da">DA</label>
+        <input type="number" name="da" id="da">20-24k
+        <div id="daErrorDiv" class="rederror"></div>
+        <br>
+        <label for="total">Total</label>
+        <input type="number" name="total" id="total">
+        <br>
+        <label for="pf">PF Salary</label>
+        <input type="number" name="pf" id="pf">10-14
+        <div id="pfErrorDiv" class="rederror"></div>
+        <br>
+        <label for="insurance">Insurance</label>
+        <input type="number" name="insurance" id="insurance">5-10k
+        <div id="insuranceErrorDiv" class="rederror"></div>
+        <br>
+
+        <label for="tot2">Tot:</label>
+        <input type="number" name="tot2" id="tot2" readonly="readonly">
+        <br><br>
+        <label for="">Salary</label>
+        <input type="number" name="salaryvalue" id="salaryvalue" readonly="readonly">
+        <br><br>
+        <label for="">Position</label>
+        <input type="text" name="position" id="position">
+        <input type="button" name="" id="" value="Submit" onclick="getData()">
+    </form>
+    <br>
+    <table border="1" height="50%" width="50%" id="tabledata">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Empid</th>
+                <th>Gender</th>
+                <th>Skills</th>
+                <th>experience</th>
+                <th>Basic</th>
+                <th>Hra</th>
+                <th>Da</th>
+                <th>Total</th>
+                <th>Pf</th>
+                <th>insurance</th>
+                <th>total</th>
+                <th>salary</th>
+                <th>position</th>
+                <!-- <th>Actions</th> -->
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+
+
+    <script>
+        //object
+        var employee = {};
+        //array
+        var empArr = [];
+        var selectedRow = null;
+        // reg expression
+        var namepattern = /^[a-zA-Z- ]+$/;
+        var ageinp = /^[0-9]+$/;
+        var RollNopattern = /^[a-zA-Z0-9_.-]*$/;
+        var EmpbasicPattern = /^(0|[1-9][0-9]*)$/;
+        var EmphraPattern = /^(0|[1-9][0-9]*)$/;
+        var EmpdaPattern = /^(0|[1-9][0-9]*)$/;
+        var EmppfPattern = /^(0|[1-9][0-9]*)$/;
+        var EmpinsPattern = /^(0|[1-9][0-9]*)$/;
+
+
+        function getData() {
+            console.log("object is:", employee);
+
+            // console.log("save data");
+            foormdata = document.getElementById("saveForm");
+            // console.log(foormdata);
+            for (i = 0; i < foormdata.length; i++) {
+                // console.log(foormdata[i].type);
+                if (foormdata[i].type == "text") {
+                    if (foormdata[i].id == "name") {
+                        fvalue = foormdata[i].value;
+                        // console.log("fval--->>>>",fvalue);
+                        if (fvalue.length == 0) {
+                            document.getElementById("nameErrorDiv").innerHTML = "Required";
+                            employee.name = "";
+                        } else if (fvalue.length < 5 || fvalue.length > 15) {
+                            document.getElementById("nameErrorDiv").innerHTML = "";
+                            employee.name = "";
+                        } else if (!namepattern.test(fvalue)) {
+                            document.getElementById("nameErrorDiv").innerHTML = "Only letters are allowed";
+                            employee.name = "";
+                        } else {
+                            document.getElementById("nameErrorDiv").innerHTML = "";
+                            employee.name = fvalue;
+                        }
+
+
+                    }
+
+                }
+                else if (foormdata[i].type == "number") {
+                    if (foormdata[i].id == "age") {
+                        svalue = foormdata[i].value;
+                        // console.log("s__>>", svalue);
+                        len = svalue.length
+                        if (len == 0) {
+                            document.getElementById("ageErrorDiv").innerHTML = "Required"
+                            employee.age = ""
+                        }
+                        else if (svalue < 18) {
+                            document.getElementById("ageErrorDiv").innerHTML = "below 18"
+                            employee.age = ""
+                        }
+                        else if (svalue >= 18 && svalue <= 100) {
+                            document.getElementById("ageErrorDiv").innerHTML = ""
+                            employee.age = svalue;
+                        }
+                        else if (svalue >= 101) {
+                            document.getElementById("ageErrorDiv").innerHTML = "Above100"
+                            employee.age = ""
+                        }
+                        else if (!ageinp.test(svalue)) {
+                            document.getElementById("ageErrorDiv").innerHTML = "only numeric values"
+                            employee.age = svalue;
+                        }
+
+                    }
+                    else if (foormdata[i].id == "rollno") {
+                        d = foormdata[i].value;
+                        // console.log("dd--->>", d);
+                        len = d.length
+                        if (len == 0) {
+                            document.getElementById("rollErrorDiv").innerHTML = "Required"
+                            employee.id = ""
+                        }
+                        else if (len == 7) {
+                            document.getElementById("rollErrorDiv").innerHTML = ""
+                            employee.id = d;
+
+                        }
+                        else if (len < 7) {
+                            document.getElementById("rollErrorDiv").innerHTML = "below 7 char"
+                            employee.id = ""
+
+                        }
+                        else if (len >= 8) {
+                            document.getElementById("rollErrorDiv").innerHTML = "above 7"
+                            employee.id = ""
+
+                        }
+                        else if (!RollNopattern.test(d)) {
+                            document.getElementById("rollErrorDiv").innerHTML = "only numeric values"
+                            employee.rollno = ""
+
+                        }
+
+                    }
+
+                    //////bas.hra.da valid
+                    else if (foormdata[i].id == "basic" || foormdata[i].id == "hra" || foormdata[i].id == "da") {
+                        var salaryValue = foormdata[i].value;
+                        var len = salaryValue.length;
+
+                        if (len == 0) {
+                            document.getElementById(foormdata[i].id + "ErrorDiv").innerHTML = "Required";
+                        }
+                        else {
+                            if (foormdata[i].id == "basic") {
+                                if (salaryValue >= 31000 && salaryValue <= 40000) {
+                                    document.getElementById(foormdata[i].id + "ErrorDiv").innerHTML = "";
+                                    employee[foormdata[i].id] = salaryValue;
+                                } else {
+                                    document.getElementById(foormdata[i].id + "ErrorDiv").innerHTML = "Basic  must be  31,000 and 40,000";
+                                }
+                            } else if (foormdata[i].id == "hra") {
+                                if (salaryValue >= 25000 && salaryValue <= 30000) {
+                                    document.getElementById(foormdata[i].id + "ErrorDiv").innerHTML = "";
+                                    employee[foormdata[i].id] = salaryValue;
+                                } else {
+                                    document.getElementById(foormdata[i].id + "ErrorDiv").innerHTML = "HRA must be 25,000 and 30,000";
+                                }
+                            } else if (foormdata[i].id == "da") {
+                                if (salaryValue >= 20000 && salaryValue <= 24000) {
+                                    document.getElementById(foormdata[i].id + "ErrorDiv").innerHTML = "";
+                                    employee[foormdata[i].id] = salaryValue;
+                                } else {
+                                    document.getElementById(foormdata[i].id + "ErrorDiv").innerHTML = "DA must be 20,000 and 24,000";
+                                }
+                            }
+                        }
+
+
+                    }
+                    //10-14 & 5-10
+                    else if (foormdata[i].id == "pf" || foormdata[i].id == "insurance") {
+                        var selValue = foormdata[i].value;
+                        var len = selValue.length;
+                        if (len == 0) {
+                            document.getElementById(foormdata[i].id + "ErrorDiv").innerHTML = "required"
+                        }
+                        else {
+                            if (foormdata[i].id == "pf") {
+                                if (selValue >= 11000 && selValue <= 14000) {
+                                    document.getElementById(foormdata[i].id + "ErrorDiv").innerHTML = ""
+                                    employee[foormdata[i].id] = selValue;
+                                }
+                                else {
+                                    document.getElementById(foormdata[i].id + "ErrorDiv").innerHTML = "must be 11-14k"
+                                }
+                            }
+                            else if (foormdata[i].id == "insurance") {
+                                if (selValue >= 5000 && selValue <= 10000) {
+                                    document.getElementById(foormdata[i].id + "ErrorDiv").innerHTML = ""
+                                    employee[foormdata[i].id] = selValue
+                                }
+                                else {
+                                    document.getElementById(foormdata[i].id + "ErrorDiv").innerHTML = "must be 5000 and 10000"
+
+                                }
+                            }
+                        }
+                    }
+
+
+
+
+                    else if (foormdata[i].id == "total" || foormdata[i].id == "tot2") {
+                        m1 = document.getElementById("basic").value;
+                        m2 = document.getElementById("hra").value;
+                        m3 = document.getElementById("da").value;
+                        m4 = document.getElementById("pf").value;
+                        m5 = document.getElementById("insurance").value;
+                        tot = parseInt(m1) + parseInt(m2) + parseInt(m3);
+                        document.getElementById("total").value = tot
+                        employee.tot = tot;
+                        total = parseInt(m4) + parseInt(m5);
+                        document.getElementById("tot2").value = total
+                        employee.total = total;
+                        final = tot - total;
+                        document.getElementById("salaryvalue").value = final
+                        employee.salary = final;
+                        // salary = employee.salary;
+                        if (final >= 60000 && final <= 70000) {
+                            a = "position is senior"
+                        }
+                        else if (final >= 50000 && final <= 59000) {
+                            a = "position is junior"
+                        }
+                        else if (final >= 30000 && final <= 39000) {
+                            a = "position is developer"
+                        }
+                        else if (final > 20000 && final <= 29000) {
+                            a = "position is trainer"
+                        }
+                        else {
+                            a = "invalid"
+                        }
+                        document.getElementById("position").value = a;
+                        employee.position = a
+
+
+                    }
+
+
+
+
+
+
+                }
+
+
+
+
+
+                else if (foormdata[i].type == "radio") {
+
+                    gender = document.getElementsByName("gen");
+                    selectedgender = ""
+                    for (j = 0; j < gender.length; j++) {
+                        if (gender[j].checked) {
+                            selectedgender = gender[j].value
+                        }
+                    }
+                    if (selectedgender) {
+                        document.getElementById("Errorgendermessage").innerHTML = ""
+                        employee.gender = selectedgender;
+                    }
+                    else {
+                        document.getElementById("Errorgendermessage").innerHTML = "required"
+                        employee.gender = ""
+
+                    }
+
+                }
+                else if (foormdata[i].type == "checkbox") {
+                    check = [];
+                    hobbi = document.getElementsByName("hobby");
+                    ////console.log("hobbi length",hobbi.length)
+                    for (o = 0; o < hobbi.length; o++) {
+                        if (hobbi[o].checked) {
+                            hobbies = hobbi[o].value;
+                            check.push(hobbi[o].value);
+                        }
+                    }
+                    if (check.length == 0) {
+                        document.getElementById("hobbiemsg").innerHTML = "Required"
+                        employee.hobbies = ""
+                    }
+                    else {
+                        document.getElementById("hobbiemsg").innerHTML = ""
+                        employee.hobbies = check;
+                    }
+                }
+                // branchhhhh
+                branch = document.getElementById("branches").value;
+                len = branch.length;
+                if (len == 0) {
+                    document.getElementById("branchmsg").innerHTML = "Required";
+                    employee.branches = ""
+                } else {
+                    document.getElementById("branchmsg").innerHTML = "";
+                    employee.branches = branch
+                }
+
+            }
+
+            if (employee.name =="" && employee.age=="" && employee.id =="" &&  employee.gender == "" &&  employee.hobbies =="" && employee.branches==""  ) {
+
+            }
+           
+
+            else {
+                if (selectedRow == null) {
+                    empArr.push(employee)
+                    TableData(empArr)
+                }
+                else {
+                    updateRecord(employee)
+                }
+                document.getElementById("saveForm").reset();
+            }
+        }
+
+        //insert 
+        function TableData(empArr) {
+            employeearray = empArr;
+            var table = document.getElementById("tabledata").getElementsByTagName("tbody")[0];
+            // console.log("tab____", table);
+            //one
+            table.innerHTML = ""
+
+            for (i = 0; i < empArr.length; i++) {
+                var newRow = table.insertRow(table.length);
+                // console.log("newRowww-------->>>>>>",newRow);
+
+                newRow.insertCell(0).innerHTML = empArr[i].name
+                newRow.insertCell(1).innerHTML = empArr[i].age
+                newRow.insertCell(2).innerHTML = empArr[i].id
+                newRow.insertCell(3).innerHTML = empArr[i].gender
+                newRow.insertCell(4).innerHTML = empArr[i].hobbies
+                newRow.insertCell(5).innerHTML = empArr[i].branches
+                newRow.insertCell(6).innerHTML = empArr[i].basic
+                newRow.insertCell(7).innerHTML = empArr[i].hra
+                newRow.insertCell(8).innerHTML = empArr[i].da
+                newRow.insertCell(9).innerHTML = empArr[i].tot
+                newRow.insertCell(10).innerHTML = empArr[i].pf
+                newRow.insertCell(11).innerHTML = empArr[i].insurance
+                newRow.insertCell(12).innerHTML = empArr[i].total
+                newRow.insertCell(13).innerHTML = empArr[i].salary
+                newRow.insertCell(14).innerHTML = empArr[i].position
+                // cell15 = newRow.insertCell(15);
+                // cell15.innerHTML = `<button onclick='onEdit(${empArr[i].id})' class='btn-claass1'>Edit</button>`;
+                newRow.insertCell(15).innerHTML = `<button onclick='onEdit(${empArr[i].id})' class='btn-claass1'>Edit</button>`;
+                newRow.insertCell(16).innerHTML = `<button onclick='deletefunc(${empArr[i].id})' class='btn-claass2'>Delete</button>`;
+                // cell16 = newRow.insertCell(16)
+                // cell16.innerHTML = `<button onclick='deletefunc(${empArr[i].id})' class='btn-claass2'>Delete</button>`;
+            }
+        }
+        selectedRow = null;
+
+
+        function updateRecord(updaobj) {
+            updateobj = updaobj;
+            // console.log("updateobj------>>>",updateobj);
+            for (z = 0; z < empArr.length; z++) {
+                if (empArr[z].id == updaobj.id) {
+                    empArr[z] = updaobj
+                }
+                selectedRow = null;
+            }
+            TableData(empArr)
+        }
+
+        function resetmethod() {
+            document.getElementById("myform").reset();
+        }
+
+        function deletefunc(deleteid) {
+            // console.log("deletid____", deleteid);
+            deleteroll = deleteid;
+            // console.log("deleteroll____", deleteroll);
+            for (f = 0; f < empArr.length; f++) {
+                if (empArr[f].id == deleteroll) {
+                    empArr.splice(f, 1)
+                    break;
+                }
+            }
+            TableData(empArr)
+
+        }
+        var updateid;
+        function onEdit(editid) {
+            selectedRow = editid;
+            // console.log("selectrow________:", selectedRow);
+            updateid = editid;
+            for (c = 0; c < empArr.length; c++) {
+                if (empArr[c].id == selectedRow) {
+                    // console.log("empArr[k].Empno ______", empArr[c].Empno);
+                    var arr = c;
+                    // console.log("edarr_______", arr);
+                    break;
+                }
+            }
+
+            document.getElementById("name").value = empArr[arr].name;
+            document.getElementById("age").value = empArr[arr].age;
+            var c = document.getElementsByName("gen");
+            for (j = 0; j < c.length; j++) {
+                // console.log(c[j]);
+                if (c[j].value == empArr[arr].gender) {
+                    c[j].checked = true;
+                    break;
+                }
+            }
+            document.getElementById("rollno").value = empArr[arr].id;
+            document.getElementById("branches").value = empArr[arr].branches
+            document.getElementById("basic").value = empArr[arr].basic
+            document.getElementById("hra").value = empArr[arr].hra
+            document.getElementById("da").value = empArr[arr].da
+            document.getElementById("total").value = empArr[arr].tot
+            document.getElementById("pf").value = empArr[arr].pf
+            document.getElementById("insurance").value = empArr[arr].insurance
+            document.getElementById("tot2").value = empArr[arr].total
+            document.getElementById("salaryvalue").value = empArr[arr].salary
+            document.getElementById("position").value = empArr[arr].position
+
+            var checkbox = document.getElementsByName("hobby");
+            for (s = 0; s < checkbox.length; s++) {
+                // console.log("_____EXPEEEE", checkbox[s].value);
+                if (empArr[arr].hobbies.includes(checkbox[s].value)) {
+                    checkbox[s].checked = true;
+
+                }
+                else {
+                    checkbox[s].checked = false;
+
+                }
+
+
+            }
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+
+</body>
+
+</html>
